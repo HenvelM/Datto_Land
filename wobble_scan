@@ -1,0 +1,45 @@
+#!/bin/sh
+
+# Checks the model to see what command to run AP62 or AP440+.
+# Checks the MAC address and stores its' value
+
+AP="AP440 AP840 A62"
+ver=""
+mac = cat /sys/class/net/eth0/address
+
+for model in $AP; do
+    if grep -q "$model" /etc/board.json; then
+        ver="$model"
+        break
+    fi
+done
+
+# Run the command based on the model and Clean up the output, remove (on scan), etc.
+case "$ver" in
+    "A62")
+        iw dev ap0_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq"  
+        iw dev ap1_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq"   
+        iw dev ap2_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq"  
+        ;;
+        
+    "AP440")
+        iw dev scan scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep "BSS\|signal\|SSID\|channel" | sed 's/(on scan)//g' 
+        ;;
+        
+    "AP840")
+        iw dev scan scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep "BSS\|signal\|SSID\|channel" | sed 's/(on scan)//g'
+        ;;
+    *)
+        echo "No matching device found"
+        ;;
+esac
+
+# Filter out any AP with RSSI value -80 or lower
+
+# Filter out its own MAC address (XX:00, XX:20, XX:40, XX:60, XX:80) (XX:A0, XX:C0, XX:E0)
+
+# Filter out any repeating AP (XX:00, XX:20, XX:40, XX:60, XX:80) (XX:A0, XX:C0, XX:E0)
+
+# Calculate the suggested dBm based on RSSI value (Lower the dBm by __)
+
+# Output the RSSI scan for partner and suggested RSSI changes on the bottom.  
