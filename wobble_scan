@@ -1,7 +1,6 @@
 #!/bin/sh
 
-# Checks the model to see what command to run AP62 or AP440+.
-# Checks the MAC address and stores its' value
+# Checks the model to see what command to run GEN1 or GEN2, Checks the MAC address and stores its' value
 
 AP="AP440 AP840 A62 A42"
 ver=""
@@ -23,7 +22,7 @@ case "$ver" in
             iw dev ap2_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n/'
         )
         ;;
-        
+
     "A62")
        scan_list=$(
             iw dev ap0_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n/' ;
@@ -50,7 +49,7 @@ esac
 
 echo ""
 
-# Filter out any repeating AP (XX:00, XX:20, XX:40, XX:60, XX:80) (XX:A0, XX:C0, XX:E0)
+# Filter out any repeating AP (XX:0X, XX:2X, XX:4X, XX:6X, XX:8X) (XX:AX, XX:CX, XX:EX) and output the revised list 
 
 unique_macs=$(echo "$scan_list" | grep -oE 'BSS [0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{1,2}' | awk '{print $2}' | awk -F: '{print $1":"$2":"$3":"$4":"$5":"substr($6, 1, length($6)-1)}' | sort -u)
 
@@ -59,7 +58,5 @@ echo "$unique_macs" | while read -r mac_addresses; do
     echo "$addr_match"
 done
 
-# Calculate the suggested dBm based on RSSI value (Lower the dBm by __)
 
-
-# Output the RSSI scan for partner and suggested RSSI changes based on formula.  
+# Output suggested RSSI changes.  
