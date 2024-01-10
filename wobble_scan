@@ -3,7 +3,7 @@
 # Checks the model to see what command to run AP62 or AP440+.
 # Checks the MAC address and stores its' value
 
-AP="AP440 AP840 A62"
+AP="AP440 AP840 A62 A42"
 ver=""
 mac0="$(grep "f8:d9:b8\|ac:86:74" /sys/class/net/eth0/address)"
 
@@ -16,6 +16,14 @@ done
 
 # Run the command based on the model and Clean up the output, remove (on scan), etc.
 case "$ver" in
+    "A42")
+       scan_list=$(
+            iw dev ap0_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n/';
+            iw dev ap1_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n/';
+            iw dev ap2_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n/'
+        )
+        ;;
+        
     "A62")
        scan_list=$(
             iw dev ap0_2 scan ap-force | grep -A 7 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|Parameter\|TIM:\|seen:\|elements\|freq" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n/' ;
@@ -40,20 +48,18 @@ case "$ver" in
         ;;
 esac
 
-# Filter out its own MAC address (XX:00, XX:20, XX:40, XX:60, XX:80) (XX:A0, XX:C0, XX:E0)
-
-mac_prefix="$(echo "$mac0" | awk -F: '{print $1 ":" $2 ":" $3 ":" $4 ":" $5}')"
-mac0_matches="$(echo "$scan_list" | grep -A 6 "$mac_prefix")"
-mac0_match=$(echo "$scan_list" | awk -v prefix="$mac_prefix" '$0 ~ prefix {print; for(i=1;i<=5;i++) {getline; print}}')
-
-echo "$mac0_match"
+echo ""
 
 # Filter out any repeating AP (XX:00, XX:20, XX:40, XX:60, XX:80) (XX:A0, XX:C0, XX:E0)
 
+unique_macs=$(echo "$scan_list" | grep -oE 'BSS [0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{2}:[0-9a-fA-F]{1,2}' | awk '{print $2}' | awk -F: '{print $1":"$2":"$3":"$4":"$5":"substr($6, 1, length($6)-1)}' | sort -u)
 
+echo "$unique_macs" | while read -r mac_addresses; do
+    addr_match=$(echo "$scan_list" | grep -A 5 -m 1 "$mac_addresses" | sed 's/BSS/\n&/g')
+    echo "$addr_match"
+done
 
 # Calculate the suggested dBm based on RSSI value (Lower the dBm by __)
-
 
 
 # Output the RSSI scan for partner and suggested RSSI changes based on formula.  
