@@ -60,28 +60,3 @@ done
 
 
 # Output suggested RSSI changes.  
-
-# Define colors
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-RED='\033[0;31m'
-NC='\033[0m' # No Color
-
-# Process the input list
-while IFS= read -r line; do
-    case "$line" in
-        *"signal:"*)
-            signal_value=$(echo "$line" | awk '{print $2}' | tr -d '.')
-            if [ "$signal_value" -ge -50 ]; then
-                echo -e "${GREEN}$line${NC}"
-            elif [ "$signal_value" -ge -60 ]; then
-                echo -e "${YELLOW}$line${NC}"
-            else
-                echo -e "${RED}$line${NC}"
-            fi
-            ;;
-        *)
-            echo "$line"
-            ;;
-    esac
-done <<< "$final_list"
