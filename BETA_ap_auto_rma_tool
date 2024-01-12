@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Gathers userinput tool(reflash or sysupgrade) going to(7.X.XX or 6.X.XX) over (eth0, eth1, etc)
+# Gathers userinput tool(reflash or sysupgrade) going to(7.X.XX or 6.X.XX) on AP model (ap62, ap440, etc) over (eth0, eth1, etc)
 
 tool="$1"
 going_to="$2"
@@ -15,7 +15,9 @@ over="$4"
 ▄█▀▀█  ██▀·    ▐▀▀▄ ▐▀▀▪▄██▪ ██▪  ▄█▀▀█ ▄▀▀▀█▄██▀▐█▐█·▐█▐▐▌▄█▀▀█ ▐█.▪ ▄█▀▄ ▐▀▀▄ 
 ▐█ ▪▐▌▐█▪·•    ▐█•█▌▐█▄▄▌██▌.▐█▌▐▌▐█ ▪▐▌▐█▄▪▐███▌▐▀▐█▌██▐█▌▐█ ▪▐▌▐█▌·▐█▌.▐▌▐█•█▌
  ▀  ▀ .▀       .▀  ▀ ▀▀▀ ▀▀▀ .▀▀▀  ▀  ▀  ▀▀▀▀ ▀▀▀ ·▀▀▀▀▀ █▪ ▀  ▀ ▀▀▀  ▀█▄▀▪.▀  ▀
-"
+By: Henvel Mateo"
+
+echo " "
 
 AP="AP840E AP840 AP440 A62 A42 DNA"
 Firmwares="7.* 6.*" 
@@ -43,13 +45,23 @@ for firmware in $Firmwares; do
 done
 
 lower_ver="$(echo "$ver" | awk '{print tolower($0)}')"
-fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-factory.bin"
-rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-factory.bin.signed"
-ng6_rf_url="http://downloads.openwrt.org/releases/packages-18.06/arm_cortex-a7_neon-vfpv4/packages/ap51-flash_2017-12-07-1_arm_cortex-a7_neon-vfpv4.ipk"
 
+# URLs based on the model of the AP and NG6/NG7
+
+fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-sysupgrade.bin"
+b_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$lowerver-squashfs-sysupgrade.bin"
+ng6_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$lowerver-squashfs-factory.bin"
+rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$ref_model-squashfs-factory.bin.signed"
+b_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$ref_model-squashfs-factory.bin.signed"
+ng6_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$ref_model-squashfs-factory.bin.signed"
+
+# Relay the inputted information
 
 echo "Mode: $tool"
 echo "Applying: $going_to"
+echo "reflashing a: $ref_model"
+echo "over: $over"
+echo ""
 
 # Run the command based on the model and version
 
@@ -61,14 +73,14 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP42 with NG7"
-                   curl -o /tmp/firmware.bin "$fw_url"
+                   curl -O /tmp/firmware.bin "$b_fw_url"
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
                6.*)
-                   if [[ "$firmware" == 6.* ]]; then
+                   if [[ "$going_to" == 6.* ]]; then
                        echo "AP42 with NG6"
-                       curl -o /tmp/firmware.bin "$rf_url"
+                       curl -O /tmp/firmware.bin "$ng6_fw_url"
                        ls -lash /tmp/firmware.bin
                        sysupgrade -n /tmp/firmware.bin
                    else
@@ -86,14 +98,14 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP62 with NG7"
-                   curl -o /tmp/firmware.bin "$fw_url"
+                   curl -O /tmp/firmware.bin "$b_fw_url"
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
                6.*)
-                   if [[ "$firmware" == 6.* ]]; then
+                   if [[ "$going_to" == 6.* ]]; then
                        echo "AP62 with NG6"
-                       curl -o /tmp/firmware.bin "$rf_url"
+                       curl -O /tmp/firmware.bin "$ng6_fw_url"
                        ls -lash /tmp/firmware.bin
                        sysupgrade -n /tmp/firmware.bin
                    else
@@ -111,7 +123,7 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP440 with NG7"
-                   curl -o /tmp/firmware.bin "$fw_url"
+                   curl -O /tmp/firmware.bin "$fw_url"
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
@@ -124,7 +136,7 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP840 with NG7"
-                   curl -o /tmp/firmware.bin "$fw_url"
+                   curl -O /tmp/firmware.bin "$fw_url"
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
@@ -137,7 +149,7 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP840e with NG7"
-                   curl -o /tmp/firmware.bin "$fw_url"
+                   curl -O /tmp/firmware.bin "$fw_url"
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
@@ -162,93 +174,148 @@ fi
 if [ "$tool" = "reflash" ]; then
     case "$ver" in
        "A42")
-           case "$firmware" in
-               7.*)
-                   echo "AP42 with NG7"
-                   opkg update ; opkg install ap51-flash
-                   cd /tmp
-                   curl -o "$rf_url"
+            if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
+                echo "AP42 executing reflash for AP62/42"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                if [[ "$going_to" == 6.* ]]; then
+                   echo "Executing reflash for NG6"
+                   curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                   ;;
-               6.*)
-                   echo "AP42 with NG6"
-                   cd /tmp
-                   curl -o "$rf_url"
+                elif [[ "$going_to" = "7.*" ]]; then
+                   echo "Executing reflash for NG7"
+                   curl -O "$b_rf_url"
                    ap51-flash "$over"
-                   ;;
-               *)
-                   echo "Unsupported version for AP42"
-                   ;;
-           esac
+                 else
+                   echo "Unsupported version for AP42 reflash tool"
+                 fi
+            else
+                echo "AP42 executing reflash for AP840/440"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                curl -O $ "$rf_url"
+                ap51-flash "$over"
+            fi
            ;;
        "A62")
-           case "$firmware" in
-               7.*)
-                   echo "AP62 with NG7"
-                   opkg update ; opkg install ap51-flash
-                   cd /tmp
-                   curl -o "$rf_url"
+            if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
+                echo "AP62 executing reflash for AP62/42"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                if [[ "$going_to" == 6.* ]]; then
+                   echo "Executing reflash for NG6"
+                   curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                   ;;
-               6.*)
-                   echo "AP62 with NG6"
-                   cd /tmp
-                   curl -o "$rf_url"
+                elif [[ "$going_to" = "7.*" ]]; then
+                   echo "Executing reflash for NG7"
+                   curl -O "$b_rf_url"
                    ap51-flash "$over"
-                   ;;
-               *)
-                   echo "Unsupported version for AP62"
-                   ;;
-           esac
+                 else
+                   echo "Unsupported version for AP62 reflash tool"
+                 fi
+            else
+                echo "AP62 executing reflash for AP840/440"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                curl -O $ "$rf_url"
+                ap51-flash "$over"
+            fi
            ;;
        "AP440")
-           case "$firmware" in
-               7.*)
-                   echo "AP440 with NG7"
-                   opkg update ; opkg install ap51-flash
-                   cd /tmp
-                   curl -o "$rf_url"
+            if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
+                echo "AP440 executing reflash for AP62/42"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                if [[ "$going_to" == 6.* ]]; then
+                   echo "Executing reflash for NG6"
+                   curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                   ;;
-               *)
-                   echo "Unsupported version for AP440"
-                   ;;
-           esac
+                elif [[ "$going_to" = "7.*" ]]; then
+                   echo "Executing reflash for NG7"
+                   curl -O "$b_rf_url"
+                   ap51-flash "$over"
+                 else
+                   echo "Unsupported version for AP440 reflash tool"
+                 fi
+            else
+                echo "AP440 executing reflash for AP840/440"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                curl -O $ "$rf_url"
+                ap51-flash "$over"
+            fi
            ;;
        "AP840")
-           case "$firmware" in
-               7.*)
-                   echo "AP840 with NG7"
-                   opkg update ; opkg install ap51-flash
-                   cd /tmp
-                   curl -o "$rf_url"
+            if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
+                echo "AP840 executing reflash for AP62/42"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                if [[ "$going_to" == 6.* ]]; then
+                   echo "Executing reflash for NG6"
+                   curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                   ;;
-               *)
-                   echo "Unsupported version for AP840"
-                   ;;
-           esac
+                elif [[ "$going_to" = "7.*" ]]; then
+                   echo "Executing reflash for NG7"
+                   curl -O "$b_rf_url"
+                   ap51-flash "$over"
+                 else
+                   echo "Unsupported version for AP840 reflash tool"
+                 fi
+            else
+                echo "AP840 executing reflash for AP840/440"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                curl -O $ "$rf_url"
+                ap51-flash "$over"
+            fi
            ;;
        "AP840E")
-           case "$firmware" in
-               7.*)
-                   echo "AP840e with NG7"
-                   opkg update ; opkg install ap51-flash
-                   cd /tmp
-                   curl -o "$rf_url"
+            if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
+                echo "AP840e executing reflash for AP62/42"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                if [[ "$going_to" == 6.* ]]; then
+                   echo "Executing reflash for NG6"
+                   curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                   ;;
-               *)
-                   echo "Unsupported version for AP840e"
-                   ;;
-           esac
+                elif [[ "$going_to" = "7.*" ]]; then
+                   echo "Executing reflash for NG7"
+                   curl -O "$b_rf_url"
+                   ap51-flash "$over"
+                 else
+                   echo "Unsupported version for AP840e reflash tool"
+                 fi
+            else
+                echo "AP840e executing reflash for AP840/440"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                curl -O $ "$rf_url"
+                ap51-flash "$over"
+            fi
            ;;
-       "DNA")
-           echo "DNA Reflash mode"
-           mountrw ; opkg update ; opkg install ap51-flash ; mountro
-           cd /tmp
-           curl -o "$rf_url"
-           ap51-flash "$over"
+        "DNA")
+            if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
+                echo "DNA executing reflash for AP62/42"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                if [[ "$going_to" == 6.* ]]; then
+                   echo "Executing reflash for NG6"
+                   curl -O "$ng6_rf_url"
+                   ap51-flash "$over"
+                elif [[ "$going_to" = "7.*" ]]; then
+                   echo "Executing reflash for NG7"
+                   curl -O "$b_rf_url"
+                   ap51-flash "$over"
+                 else
+                   echo "Unsupported version for AP840e reflash tool"
+                 fi
+            else
+                echo "DNA executing reflash for AP840/440"
+                opkg update ; opkg install ap51-flash
+                cd /tmp
+                curl -O $ "$rf_url"
+                ap51-flash "$over"
+            fi
             ;;
         *)
             echo "No matching device found"
