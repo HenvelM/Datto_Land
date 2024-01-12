@@ -45,6 +45,7 @@ done
 lower_ver="$(echo "$ver" | awk '{print tolower($0)}')"
 fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-factory.bin"
 rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-factory.bin.signed"
+ng6_rf_url="http://downloads.openwrt.org/releases/packages-18.06/arm_cortex-a7_neon-vfpv4/packages/ap51-flash_2017-12-07-1_arm_cortex-a7_neon-vfpv4.ipk"
 
 
 echo "Mode: $tool"
@@ -67,7 +68,7 @@ if [ "$tool" = "sysupgrade" ]; then
                6.*)
                    if [[ "$firmware" == 6.* ]]; then
                        echo "AP42 with NG6"
-                       curl -o /tmp/firmware.bin "$fw_url"
+                       curl -o /tmp/firmware.bin "$rf_url"
                        ls -lash /tmp/firmware.bin
                        sysupgrade -n /tmp/firmware.bin
                    else
@@ -92,7 +93,7 @@ if [ "$tool" = "sysupgrade" ]; then
                6.*)
                    if [[ "$firmware" == 6.* ]]; then
                        echo "AP62 with NG6"
-                       curl -o /tmp/firmware.bin "$fw_url"
+                       curl -o /tmp/firmware.bin "$rf_url"
                        ls -lash /tmp/firmware.bin
                        sysupgrade -n /tmp/firmware.bin
                    else
@@ -164,9 +165,16 @@ if [ "$tool" = "reflash" ]; then
            case "$firmware" in
                7.*)
                    echo "AP42 with NG7"
+                   opkg update ; opkg install ap51-flash
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
                    ;;
                6.*)
                    echo "AP42 with NG6"
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
                    ;;
                *)
                    echo "Unsupported version for AP42"
@@ -177,9 +185,16 @@ if [ "$tool" = "reflash" ]; then
            case "$firmware" in
                7.*)
                    echo "AP62 with NG7"
+                   opkg update ; opkg install ap51-flash
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
                    ;;
                6.*)
                    echo "AP62 with NG6"
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
                    ;;
                *)
                    echo "Unsupported version for AP62"
@@ -204,6 +219,10 @@ if [ "$tool" = "reflash" ]; then
            case "$firmware" in
                7.*)
                    echo "AP840 with NG7"
+                   opkg update ; opkg install ap51-flash
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
                    ;;
                *)
                    echo "Unsupported version for AP840"
