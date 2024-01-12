@@ -1,0 +1,240 @@
+#!/bin/sh
+
+# Gathers userinput tool(reflash or sysupgrade) going to(7.X.XX or 6.X.XX) over (eth0, eth1, etc)
+
+tool="$1"
+going_to="$2"
+ref_model="$3"
+over="$4"
+
+# Checks the model to see what URL to use to run AP42/AP62/AP440/AP840/AP840e and ask the user what tool to use.
+
+"
+ ▄▄▄·  ▄▄▄·    ▄▄▄  ▄▄▄ .·▄▄▄▄▄▌   ▄▄▄· .▄▄ ·  ▄ .▄▪   ▐ ▄  ▄▄▄·▄▄▄▄▄      ▄▄▄  
+▐█ ▀█ ▐█ ▄█    ▀▄ █·▀▄.▀·▐▄▄·██•  ▐█ ▀█ ▐█ ▀. ██▪▐███ •█▌▐█▐█ ▀█•██  ▪     ▀▄ █·
+▄█▀▀█  ██▀·    ▐▀▀▄ ▐▀▀▪▄██▪ ██▪  ▄█▀▀█ ▄▀▀▀█▄██▀▐█▐█·▐█▐▐▌▄█▀▀█ ▐█.▪ ▄█▀▄ ▐▀▀▄ 
+▐█ ▪▐▌▐█▪·•    ▐█•█▌▐█▄▄▌██▌.▐█▌▐▌▐█ ▪▐▌▐█▄▪▐███▌▐▀▐█▌██▐█▌▐█ ▪▐▌▐█▌·▐█▌.▐▌▐█•█▌
+ ▀  ▀ .▀       .▀  ▀ ▀▀▀ ▀▀▀ .▀▀▀  ▀  ▀  ▀▀▀▀ ▀▀▀ ·▀▀▀▀▀ █▪ ▀  ▀ ▀▀▀  ▀█▄▀▪.▀  ▀
+"
+
+AP="AP840E AP840 AP440 A62 A42 DNA"
+Firmwares="7.* 6.*" 
+ver=""
+NG=""
+
+for model in $AP; do
+    if grep -oq "$model" /etc/board.json; then
+        ver="$model"
+        break
+    elif grep -oq "DNA" /etc/device_info; then
+        ver="DNA"
+        break
+    fi
+done
+
+for firmware in $Firmwares; do
+    if grep -q "$firmware" /etc/fw_core_version; then
+        NG="$firmware"
+        break
+    elif grep -q "$firmware" /etc/fw_ng_version; then
+        NG="$firmware"
+        break
+    fi
+done
+
+lower_ver="$(echo "$ver" | awk '{print tolower($0)}')"
+fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-factory.bin"
+rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-factory.bin.signed"
+
+
+echo "Mode: $tool"
+echo "Applying: $going_to"
+
+# Run the command based on the model and version
+
+#Sysupgrade path
+
+if [ "$tool" = "sysupgrade" ]; then
+    case "$ver" in
+       "A42")
+           case "$firmware" in
+               7.*)
+                   echo "AP42 with NG7"
+                   curl -o /tmp/firmware.bin "$fw_url"
+                   ls -lash /tmp/firmware.bin
+                   sysupgrade -n /tmp/firmware.bin
+                   ;;
+               6.*)
+                   if [[ "$firmware" == 6.* ]]; then
+                       echo "AP42 with NG6"
+                       curl -o /tmp/firmware.bin "$fw_url"
+                       ls -lash /tmp/firmware.bin
+                       sysupgrade -n /tmp/firmware.bin
+                   else
+                       echo "DO NOT sysupgrade 6.X.XX APs to any 7.X.XX version."
+                       echo "Doing so will not work correctly and may break the AP."
+                       echo "Either use the flash tool or upgrade through Network Manager."
+                   fi
+                   ;;
+               *)
+                   echo "Unsupported firmware version for AP42"
+                   ;;
+           esac
+           ;;
+       "A62")
+           case "$firmware" in
+               7.*)
+                   echo "AP62 with NG7"
+                   curl -o /tmp/firmware.bin "$fw_url"
+                   ls -lash /tmp/firmware.bin
+                   sysupgrade -n /tmp/firmware.bin
+                   ;;
+               6.*)
+                   if [[ "$firmware" == 6.* ]]; then
+                       echo "AP62 with NG6"
+                       curl -o /tmp/firmware.bin "$fw_url"
+                       ls -lash /tmp/firmware.bin
+                       sysupgrade -n /tmp/firmware.bin
+                   else
+                       echo "DO NOT sysupgrade 6.X.XX APs to any 7.X.XX version."
+                       echo "Doing so will not work correctly and may break the AP."
+                       echo "Either use the flash tool or upgrade through Network Manager."
+                   fi
+                   ;;
+               *)
+                   echo "Unsupported version for AP62 contact el James"
+                   ;;
+           esac
+           ;;
+       "AP440")
+           case "$firmware" in
+               7.*)
+                   echo "AP440 with NG7"
+                   curl -o /tmp/firmware.bin "$fw_url"
+                   ls -lash /tmp/firmware.bin
+                   sysupgrade -n /tmp/firmware.bin
+                   ;;
+               *)
+                   echo "Unsupported version for AP440 contact el James"
+                   ;;
+           esac
+           ;;
+       "AP840")
+           case "$firmware" in
+               7.*)
+                   echo "AP840 with NG7"
+                   curl -o /tmp/firmware.bin "$fw_url"
+                   ls -lash /tmp/firmware.bin
+                   sysupgrade -n /tmp/firmware.bin
+                   ;;
+               *)
+                   echo "Unsupported version for AP840 contact el James"
+                   ;;
+           esac
+           ;;
+       "AP840E")
+           case "$firmware" in
+               7.*)
+                   echo "AP840e with NG7"
+                   curl -o /tmp/firmware.bin "$fw_url"
+                   ls -lash /tmp/firmware.bin
+                   sysupgrade -n /tmp/firmware.bin
+                   ;;
+               *)
+                   echo "Unsupported version for AP840e contact el James"
+                   ;;
+           esac
+           ;;
+       "DNA")
+           echo "Sysupgrade not available for DNA"
+            ;;
+        *)
+            echo "No supported device for a sysupgrade found"
+            ;;
+    esac
+else
+    echo "Did not select to sysupgrade"
+fi
+
+#Reflash Path
+
+if [ "$tool" = "reflash" ]; then
+    case "$ver" in
+       "A42")
+           case "$firmware" in
+               7.*)
+                   echo "AP42 with NG7"
+                   ;;
+               6.*)
+                   echo "AP42 with NG6"
+                   ;;
+               *)
+                   echo "Unsupported version for AP42"
+                   ;;
+           esac
+           ;;
+       "A62")
+           case "$firmware" in
+               7.*)
+                   echo "AP62 with NG7"
+                   ;;
+               6.*)
+                   echo "AP62 with NG6"
+                   ;;
+               *)
+                   echo "Unsupported version for AP62"
+                   ;;
+           esac
+           ;;
+       "AP440")
+           case "$firmware" in
+               7.*)
+                   echo "AP440 with NG7"
+                   opkg update ; opkg install ap51-flash
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
+                   ;;
+               *)
+                   echo "Unsupported version for AP440"
+                   ;;
+           esac
+           ;;
+       "AP840")
+           case "$firmware" in
+               7.*)
+                   echo "AP840 with NG7"
+                   ;;
+               *)
+                   echo "Unsupported version for AP840"
+                   ;;
+           esac
+           ;;
+       "AP840E")
+           case "$firmware" in
+               7.*)
+                   echo "AP840e with NG7"
+                   opkg update ; opkg install ap51-flash
+                   cd /tmp
+                   curl -o "$rf_url"
+                   ap51-flash "$over"
+                   ;;
+               *)
+                   echo "Unsupported version for AP840e"
+                   ;;
+           esac
+           ;;
+       "DNA")
+           echo "DNA Reflash mode"
+           mountrw ; opkg update ; opkg install ap51-flash ; mountro
+           cd /tmp
+           curl -o "$rf_url"
+           ap51-flash "$over"
+            ;;
+        *)
+            echo "No matching device found"
+            ;;
+    esac
+else
+    echo "Did not select to reflash"
+fi
