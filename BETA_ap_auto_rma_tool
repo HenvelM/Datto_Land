@@ -1,13 +1,21 @@
 #!/bin/sh
 
-# Gathers userinput tool(reflash or sysupgrade) going to(7.X.XX or 6.X.XX) on AP model (ap62, ap440, etc) over (eth0, eth1, etc)
+# Gathers user input...
+# First choice is to either sysupgrade or reflash
+# Second choice is the version you want to apply
+# Third choice is the model of the AP (only applies to reflash mode)
+# Fourth choice is the interface going out from (only applies to reflash mode)
 
-tool="$1"
+tool_0="$1"
 going_to="$2"
-ref_model="$3"
-over="$4"
+ref_model_0="$3"
+over_0="$4"
 
-# Checks the model to see what URL to use to run AP42/AP62/AP440/AP840/AP840e and ask the user what tool to use.
+tool="$(echo "$tool_0" | awk '{print tolower($0)}')"
+ref_model="$(echo "$ref_model_0" | awk '{print tolower($0)}')"
+over="$(echo "$over_0" | awk '{print tolower($0)}')"
+
+# Gathers APs' information like AP model (AP42/AP62/AP440/AP840/AP840e) and AP version (NG7 or NG6)
 
 "
  ▄▄▄·  ▄▄▄·    ▄▄▄  ▄▄▄ .·▄▄▄▄▄▌   ▄▄▄· .▄▄ ·  ▄ .▄▪   ▐ ▄  ▄▄▄·▄▄▄▄▄      ▄▄▄  
@@ -46,7 +54,7 @@ done
 
 lower_ver="$(echo "$ver" | awk '{print tolower($0)}')"
 
-# URLs based on the model of the AP and NG6/NG7
+# Set URLs based on the model of the AP and current firmware (NG6/NG7)
 
 fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-sysupgrade.bin"
 b_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$lowerver-squashfs-sysupgrade.bin"
@@ -55,15 +63,16 @@ rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-
 b_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$ref_model-squashfs-factory.bin.signed"
 ng6_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$ref_model-squashfs-factory.bin.signed"
 
-# Relay the inputted information
+# Relay the inputted information 
 
 echo "Mode: $tool"
 echo "Applying: $going_to"
-echo "reflashing a: $ref_model"
-echo "over: $over"
+echo "Reflashing a: $ref_model"
+echo "Going over: $over"
 echo ""
 
-# Run the command based on the model and version
+# Runs the standard commands based on the model and version of the current AP.
+# If doing a sysupgrade ensures that NG6 cannot go to NG7
 
 #Sysupgrade path
 
