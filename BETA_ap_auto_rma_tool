@@ -307,7 +307,7 @@ if [ "$tool" = "reflash" ]; then
         "DNA")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "DNA executing reflash for AP62/42"
-                opkg update ; opkg install ap51-flash
+                mountrw ; opkg update ; opkg install ap51-flash ; mountro
                 cd /tmp
                 if [[ "$going_to" == 6.* ]]; then
                    echo "Executing reflash for NG6"
@@ -318,11 +318,11 @@ if [ "$tool" = "reflash" ]; then
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
                  else
-                   echo "Unsupported version for AP840e reflash tool"
+                   echo "Unsupported version for DNA reflash tool"
                  fi
             else
                 echo "DNA executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                mountrw ; opkg update ; opkg install ap51-flash ; mountro
                 cd /tmp
                 curl -O $ "$rf_url"
                 ap51-flash "$over"
