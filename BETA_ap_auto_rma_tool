@@ -193,7 +193,7 @@ if [ "$tool" = "reflash" ]; then
                    echo "Executing reflash for NG6"
                    curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                elif [[ "$going_to" = 7.* ]]; then
+                elif [[ "$going_to" == 7.* ]]; then
                    echo "Executing reflash for NG7"
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
@@ -217,7 +217,7 @@ if [ "$tool" = "reflash" ]; then
                    echo "Executing reflash for NG6"
                    curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                elif [[ "$going_to" = 7.* ]]; then
+                elif [[ "$going_to" == 7.* ]]; then
                    echo "Executing reflash for NG7"
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
@@ -241,7 +241,7 @@ if [ "$tool" = "reflash" ]; then
                    echo "Executing reflash for NG6"
                    curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                elif [[ "$going_to" = 7.* ]]; then
+                elif [[ "$going_to" == 7.* ]]; then
                    echo "Executing reflash for NG7"
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
@@ -265,7 +265,7 @@ if [ "$tool" = "reflash" ]; then
                    echo "Executing reflash for NG6"
                    curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                elif [[ "$going_to" = 7.* ]]; then
+                elif [[ "$going_to" == 7.* ]]; then
                    echo "Executing reflash for NG7"
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
@@ -289,7 +289,7 @@ if [ "$tool" = "reflash" ]; then
                    echo "Executing reflash for NG6"
                    curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                elif [[ "$going_to" = 7.* ]]; then
+                elif [[ "$going_to" == 7.* ]]; then
                    echo "Executing reflash for NG7"
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
@@ -313,7 +313,7 @@ if [ "$tool" = "reflash" ]; then
                    echo "Executing reflash for NG6"
                    curl -O "$ng6_rf_url"
                    ap51-flash "$over"
-                elif [[ "$going_to" = 7.* ]]; then
+                elif [[ "$going_to" == 7.* ]]; then
                    echo "Executing reflash for NG7"
                    curl -O "$b_rf_url"
                    ap51-flash "$over"
