@@ -43,12 +43,14 @@ for model in $AP; do
 done
 
 for firmware in $Firmwares; do
-    if grep -q "$firmware" /etc/fw_core_version; then
-        NG="$firmware"
-        break
-    elif grep -q "$firmware" /etc/fw_ng_version; then
-        NG="$firmware"
-        break
+    if [ "$ver" != "DNA" ]; then
+       if grep -q "$firmware" /etc/fw_core_version; then
+           NG="$firmware"
+           break
+       elif grep -q "$firmware" /etc/fw_ng_version; then
+           NG="$firmware"
+           break
+       fi
     fi
 done
 
