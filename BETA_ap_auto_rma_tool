@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Gathers user input...
+# Gathers user input....
 # First choice is to either sysupgrade or reflash
 # Second choice is the version you want to apply
 # Third choice is the model of the AP (only applies to reflash mode)
@@ -55,19 +55,36 @@ for firmware in $Firmwares; do
 done
 
 lower_ver="$(echo "$ver" | awk '{print tolower($0)}')"
+lower_ver1="$(echo "$lower_ver" |  tr -d 'Pp')"
+ref_model1="$(echo "$ref_model" | tr -d 'Pp')"
+ref_model2="$(echo "$ref_model1" | awk '{print toupper($0)}')"
 
 # Set URLs based on the model of the AP and current firmware (NG6/NG7)
 
 fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$lower_ver-squashfs-sysupgrade.bin"
-b_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$lowerver-squashfs-sysupgrade.bin"
-ng6_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$lowerver-squashfs-factory.bin"
+b_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$lower_ver1-squashfs-sysupgrade.bin"
+ng6_fw_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$lower_ver1-squashfs-factory.bin"
 rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq807x-datto_$ref_model-squashfs-factory.bin.signed"
-b_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$ref_model-squashfs-factory.bin.signed"
-ng6_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$ref_model-squashfs-factory.bin.signed"
+b_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-generic-openmesh_$ref_model1-squashfs-factory.bin.signed"
+ng6_rf_url="http://files.cloudtrax.com/downloads/firmware/$going_to/openwrt-ipq40xx-$ref_model2-squashfs-factory.bin.signed"
+
+rf_51="openwrt-ipq807x-datto_$ref_model-squashfs-factory.bin.signed"
+b_rf_51="openwrt-ipq40xx-generic-openmesh_$ref_model1-squashfs-factory.bin.signed"
+ng6_rf_51="openwrt-ipq40xx-$ref_model2-squashfs-factory.bin.signed"
+
+sysupgrding_0="curl -o /tmp/firmware.bin $fw_url"
+sysupgrding_1="curl -o /tmp/firmware.bin $b_fw_url"
+sysupgrding_2="curl -o /tmp/firmware.bin $ng6_fw_url"
+
+flashing_0="ap51-flash $over $rf_51"
+flashing_1="ap51-flash $over $b_rf_51"
+flashing_2="ap51-flash $over $ng6_rf_url"
 
 # Relay the inputted information 
 
+echo "AP Model: $ver"
 echo "Mode: $tool"
+echo "Currently: $ver"
 echo "Applying: $going_to"
 echo "Reflashing a: $ref_model"
 echo "Going over: $over"
@@ -84,49 +101,59 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP42 with NG7"
-                   curl -O /tmp/firmware.bin "$b_fw_url"
+                   echo "Downloading $b_fw_url"
+                   $sysupgrding_1
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
                6.*)
-                   if [[ "$going_to" == 6.* ]]; then
-                       echo "AP42 with NG6"
-                       curl -O /tmp/firmware.bin "$ng6_fw_url"
-                       ls -lash /tmp/firmware.bin
-                       sysupgrade -n /tmp/firmware.bin
-                   else
-                       echo "DO NOT sysupgrade 6.X.XX APs to any 7.X.XX version."
-                       echo "Doing so will not work correctly and may break the AP."
-                       echo "Either use the flash tool or upgrade through Network Manager."
-                   fi
-                   ;;
+                   case "$going_to" in
+                       6.*)
+                           echo "Executing sysupgrade for NG6 on AP42"
+                           echo "Downloading: $ng6_fw_url"
+                           $sysupgrding_2
+                           ls -lash /tmp/firmware.bin
+                           sysupgrade -n /tmp/firmware.bin
+                           ;;
+                       *)
+                           echo "DO NOT sysupgrade 6.X.XX APs to any 7.X.XX or higher version."
+                           echo "Doing so will not work correctly and may break the AP."
+                           echo "Either use the flash tool or upgrade through Network Manager."
+                           ;;
+                     esac
+                     ;;
                *)
                    echo "Unsupported firmware version for AP42"
                    ;;
            esac
            ;;
        "A62")
-           case "$firmware" in
+              case "$firmware" in
                7.*)
                    echo "AP62 with NG7"
-                   curl -O /tmp/firmware.bin "$b_fw_url"
+                   echo "Downloading $b_fw_url"
+                   $sysupgrding_1
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
                6.*)
-                   if [[ "$going_to" == 6.* ]]; then
-                       echo "AP62 with NG6"
-                       curl -O /tmp/firmware.bin "$ng6_fw_url"
-                       ls -lash /tmp/firmware.bin
-                       sysupgrade -n /tmp/firmware.bin
-                   else
-                       echo "DO NOT sysupgrade 6.X.XX APs to any 7.X.XX version."
-                       echo "Doing so will not work correctly and may break the AP."
-                       echo "Either use the flash tool or upgrade through Network Manager."
-                   fi
-                   ;;
+                   case "$going_to" in
+                       6.*)
+                           echo "Executing sysupgrade for NG6 on AP62"
+                           echo "Downloading: $ng6_fw_url"
+                           $sysupgrding_2
+                           ls -lash /tmp/firmware.bin
+                           sysupgrade -n /tmp/firmware.bin
+                           ;;
+                       *)
+                           echo "DO NOT sysupgrade 6.X.XX APs to any 7.X.XX or higher version."
+                           echo "Doing so will not work correctly and may break the AP."
+                           echo "Either use the flash tool or upgrade through Network Manager."
+                           ;;
+                     esac
+                     ;;
                *)
-                   echo "Unsupported version for AP62 contact el James"
+                   echo "Unsupported firmware version for AP62"
                    ;;
            esac
            ;;
@@ -134,7 +161,8 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP440 with NG7"
-                   curl -O /tmp/firmware.bin "$fw_url"
+                   echo "Downloading $fw_url"
+                   $sysupgrding_0
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
@@ -147,7 +175,8 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP840 with NG7"
-                   curl -O /tmp/firmware.bin "$fw_url"
+                   echo "Downloading $fw_url"
+                   $sysupgrding_0
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
@@ -160,7 +189,8 @@ if [ "$tool" = "sysupgrade" ]; then
            case "$firmware" in
                7.*)
                    echo "AP840e with NG7"
-                   curl -O /tmp/firmware.bin "$fw_url"
+                   echo "Downloading $fw_url"
+                   $sysupgrding_0
                    ls -lash /tmp/firmware.bin
                    sysupgrade -n /tmp/firmware.bin
                    ;;
@@ -189,23 +219,30 @@ if [ "$tool" = "reflash" ]; then
                 echo "AP42 executing reflash for AP62/42"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                if [[ "$going_to" == 6.* ]]; then
-                   echo "Executing reflash for NG6"
-                   curl -O "$ng6_rf_url"
-                   ap51-flash "$over"
-                elif [[ "$going_to" == 7.* ]]; then
-                   echo "Executing reflash for NG7"
-                   curl -O "$b_rf_url"
-                   ap51-flash "$over"
-                 else
-                   echo "Unsupported version for AP42 reflash tool"
-                 fi
+                case "$going_to" in
+                6.*)
+                    echo "Executing reflash for NG6"
+                    echo "Downloading: $ng6_rf_url"
+                    curl -O "$ng6_rf_url"
+                    $flashing_2
+                    ;;
+                7.*)
+                    echo "Executing reflash for NG7"
+                    echo "Downloading: $b_rf_url"
+                    curl -O "$b_rf_url"
+                    $flashing_1
+                    ;;
+                *)
+                    echo "Unsupported version for AP42 reflash tool"
+                    ;;
+                 esac
             else
                 echo "AP42 executing reflash for AP840/440"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                curl -O $ "$rf_url"
-                ap51-flash "$over"
+                echo "Downloading: $rf_url"
+                curl -O "$rf_url"
+                $flashing_0
             fi
            ;;
        "A62")
@@ -213,23 +250,30 @@ if [ "$tool" = "reflash" ]; then
                 echo "AP62 executing reflash for AP62/42"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                if [[ "$going_to" == 6.* ]]; then
-                   echo "Executing reflash for NG6"
-                   curl -O "$ng6_rf_url"
-                   ap51-flash "$over"
-                elif [[ "$going_to" == 7.* ]]; then
-                   echo "Executing reflash for NG7"
-                   curl -O "$b_rf_url"
-                   ap51-flash "$over"
-                 else
-                   echo "Unsupported version for AP62 reflash tool"
-                 fi
+                case "$going_to" in
+                6.*)
+                    echo "Executing reflash for NG6"
+                    echo "Downloading: $ng6_rf_url"
+                    curl -O "$ng6_rf_url"
+                    $flashing_2
+                    ;;
+                7.*)
+                    echo "Executing reflash for NG7"
+                    echo "Downloading: $b_rf_url"
+                    curl -O "$b_rf_url"
+                    $flashing_1
+                    ;;
+                *)
+                    echo "Unsupported version for AP62 reflash tool"
+                    ;;
+                 esac
             else
                 echo "AP62 executing reflash for AP840/440"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                curl -O $ "$rf_url"
-                ap51-flash "$over"
+                echo "Downloading: $rf_url"
+                curl -O "$rf_url"
+                $flashing_0
             fi
            ;;
        "AP440")
@@ -237,23 +281,30 @@ if [ "$tool" = "reflash" ]; then
                 echo "AP440 executing reflash for AP62/42"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                if [[ "$going_to" == 6.* ]]; then
-                   echo "Executing reflash for NG6"
-                   curl -O "$ng6_rf_url"
-                   ap51-flash "$over"
-                elif [[ "$going_to" == 7.* ]]; then
-                   echo "Executing reflash for NG7"
-                   curl -O "$b_rf_url"
-                   ap51-flash "$over"
-                 else
-                   echo "Unsupported version for AP440 reflash tool"
-                 fi
+                case "$going_to" in
+                6.*)
+                    echo "Executing reflash for NG6"
+                    echo "Downloading: $ng6_rf_url"
+                    curl -O "$ng6_rf_url"
+                    $flashing_2
+                    ;;
+                7.*)
+                    echo "Executing reflash for NG7"
+                    echo "Downloading: $b_rf_url"
+                    curl -O "$b_rf_url"
+                    $flashing_1
+                    ;;
+                *)
+                    echo "Unsupported version for AP440 reflash tool"
+                    ;;
+                 esac
             else
                 echo "AP440 executing reflash for AP840/440"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                curl -O $ "$rf_url"
-                ap51-flash "$over"
+                echo "Downloading: $rf_url"
+                curl -O "$rf_url"
+                $flashing_0
             fi
            ;;
        "AP840")
@@ -261,23 +312,30 @@ if [ "$tool" = "reflash" ]; then
                 echo "AP840 executing reflash for AP62/42"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                if [[ "$going_to" == 6.* ]]; then
-                   echo "Executing reflash for NG6"
-                   curl -O "$ng6_rf_url"
-                   ap51-flash "$over"
-                elif [[ "$going_to" == 7.* ]]; then
-                   echo "Executing reflash for NG7"
-                   curl -O "$b_rf_url"
-                   ap51-flash "$over"
-                 else
-                   echo "Unsupported version for AP840 reflash tool"
-                 fi
+                case "$going_to" in
+                6.*)
+                    echo "Executing reflash for NG6"
+                    echo "Downloading: $ng6_rf_url"
+                    curl -O "$ng6_rf_url"
+                    $flashing_2
+                    ;;
+                7.*)
+                    echo "Executing reflash for NG7"
+                    echo "Downloading: $b_rf_url"
+                    curl -O "$b_rf_url"
+                    $flashing_1
+                    ;;
+                *)
+                    echo "Unsupported version for AP840 reflash tool"
+                    ;;
+                 esac
             else
                 echo "AP840 executing reflash for AP840/440"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                curl -O $ "$rf_url"
-                ap51-flash "$over"
+                echo "Downloading: $rf_url"
+                curl -O "$rf_url"
+                $flashing_0
             fi
            ;;
        "AP840E")
@@ -285,23 +343,30 @@ if [ "$tool" = "reflash" ]; then
                 echo "AP840e executing reflash for AP62/42"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                if [[ "$going_to" == 6.* ]]; then
-                   echo "Executing reflash for NG6"
-                   curl -O "$ng6_rf_url"
-                   ap51-flash "$over"
-                elif [[ "$going_to" == 7.* ]]; then
-                   echo "Executing reflash for NG7"
-                   curl -O "$b_rf_url"
-                   ap51-flash "$over"
-                 else
-                   echo "Unsupported version for AP840e reflash tool"
-                 fi
+                case "$going_to" in
+                6.*)
+                    echo "Executing reflash for NG6"
+                    echo "Downloading: $ng6_rf_url"
+                    curl -O "$ng6_rf_url"
+                    $flashing_2
+                    ;;
+                7.*)
+                    echo "Executing reflash for NG7"
+                    echo "Downloading: $b_rf_url"
+                    curl -O "$b_rf_url"
+                    $flashing_1
+                    ;;
+                *)
+                    echo "Unsupported version for AP840e reflash tool"
+                    ;;
+                 esac
             else
                 echo "AP840e executing reflash for AP840/440"
                 opkg update ; opkg install ap51-flash
                 cd /tmp
-                curl -O $ "$rf_url"
-                ap51-flash "$over"
+                echo "Downloading: $rf_url"
+                curl -O "$rf_url"
+                $flashing_0
             fi
            ;;
         "DNA")
@@ -309,25 +374,32 @@ if [ "$tool" = "reflash" ]; then
                 echo "DNA executing reflash for AP62/42"
                 mountrw ; opkg update ; opkg install ap51-flash ; mountro
                 cd /tmp
-                if [[ "$going_to" == 6.* ]]; then
-                   echo "Executing reflash for NG6"
-                   curl -O "$ng6_rf_url"
-                   ap51-flash "$over"
-                elif [[ "$going_to" == 7.* ]]; then
-                   echo "Executing reflash for NG7"
-                   curl -O "$b_rf_url"
-                   ap51-flash "$over"
-                 else
-                   echo "Unsupported version for DNA reflash tool"
-                 fi
+                case "$going_to" in
+                6.*)
+                    echo "Executing reflash for NG6"
+                    echo "Downloading: $ng6_rf_url"
+                    curl -O "$ng6_rf_url"
+                    $flashing_2
+                    ;;
+                7.*)
+                    echo "Executing reflash for NG7"
+                    echo "Downloading: $b_rf_url"
+                    curl -O "$b_rf_url"
+                    $flashing_1
+                    ;;
+                *)
+                    echo "Unsupported version for DNA reflash tool"
+                    ;;
+                 esac
             else
                 echo "DNA executing reflash for AP840/440"
-                mountrw ; opkg update ; opkg install ap51-flash ; mountro
+                opkg update ; opkg install ap51-flash
                 cd /tmp
-                curl -O $ "$rf_url"
-                ap51-flash "$over"
+                echo "Downloading: $rf_url"
+                curl -O "$rf_url"
+                $flashing_0
             fi
-            ;;
+           ;;
         *)
             echo "No matching device found"
             ;;
