@@ -238,7 +238,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "AP42 executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
@@ -269,7 +269,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "AP62 executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
@@ -300,7 +300,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "AP440 executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
@@ -331,7 +331,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "AP840 executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
@@ -362,7 +362,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "AP840e executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
@@ -393,7 +393,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "DNA executing reflash for AP840/440"
-                opkg update ; opkg install ap51-flash
+                mountrw ; opkg update ; opkg install ap51-flash ; mountro
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
