@@ -19,5 +19,5 @@ This script can be used to automatically update the current AP to the desire ver
 
  To utilize this script just run curl -s (link) | sh -s -- (sysupgrade or reflash) (7.X.XX or 6.X.XX) (AP Model*) (Interface*) 
 
-* Used only with reflash
+* "*" Used only with reflash
 
