@@ -217,7 +217,7 @@ if [ "$tool" = "reflash" ]; then
        "A42")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "AP42 executing reflash for AP62/42"
-                opkg update ; opkg install ap51-flash
+                opkg install http://files.cloudtrax.com/downloads/firmware/7.0.13/ap51-flash_2022.0+_arm_cortex-a7_neon-vfpv4.ipk
                 cd /tmp
                 case "$going_to" in
                 6.*)
@@ -248,7 +248,7 @@ if [ "$tool" = "reflash" ]; then
        "A62")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "AP62 executing reflash for AP62/42"
-                opkg update ; opkg install ap51-flash
+                opkg install http://files.cloudtrax.com/downloads/firmware/7.0.13/ap51-flash_2022.0+_arm_cortex-a7_neon-vfpv4.ipk
                 cd /tmp
                 case "$going_to" in
                 6.*)
@@ -279,7 +279,7 @@ if [ "$tool" = "reflash" ]; then
        "AP440")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "AP440 executing reflash for AP62/42"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 case "$going_to" in
                 6.*)
@@ -310,7 +310,7 @@ if [ "$tool" = "reflash" ]; then
        "AP840")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "AP840 executing reflash for AP62/42"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 case "$going_to" in
                 6.*)
@@ -341,7 +341,7 @@ if [ "$tool" = "reflash" ]; then
        "AP840E")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "AP840e executing reflash for AP62/42"
-                opkg update ; opkg install ap51-flash
+                opkg install http://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
                 cd /tmp
                 case "$going_to" in
                 6.*)
