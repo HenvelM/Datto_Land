@@ -21,3 +21,6 @@ This script can be used to automatically update the current AP to the desire ver
 
 * "*" Used only with reflash
 
+## LTE Repair
+
+Verifies the connectivity on the LTE modem found in the routers, if the ping test fails it will run the steps to reboot the modem and run pymm to get the LTE back up. Does a ping test after a few steps to verify if the LTE has come back up after modem reboot or pymm. 
