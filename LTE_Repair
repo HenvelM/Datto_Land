@@ -1,0 +1,88 @@
+#!/bin/sh
+"
+██╗  ████████╗███████╗    ██████╗ ███████╗██████╗  █████╗ ██╗██████╗ ██╗███╗   ██╗ █████╗ ████████╗ ██████╗ ██████╗ 
+██║  ╚══██╔══╝██╔════╝    ██╔══██╗██╔════╝██╔══██╗██╔══██╗██║██╔══██╗██║████╗  ██║██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗
+██║     ██║   █████╗      ██████╔╝█████╗  ██████╔╝███████║██║██████╔╝██║██╔██╗ ██║███████║   ██║   ██║   ██║██████╔╝
+██║     ██║   ██╔══╝      ██╔══██╗██╔══╝  ██╔═══╝ ██╔══██║██║██╔══██╗██║██║╚██╗██║██╔══██║   ██║   ██║   ██║██╔══██╗
+███████╗██║   ███████╗    ██║  ██║███████╗██║     ██║  ██║██║██║  ██║██║██║ ╚████║██║  ██║   ██║   ╚██████╔╝██║  ██║
+╚══════╝╚═╝   ╚══════╝    ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+"
+# Create the variables and functions
+
+router=""
+modem_re() {
+  /etc/init.d/$router-modemmanager stop
+  sleep 5
+  pymm &
+  sleep 60
+  kill $!
+  sleep 10
+  /etc/init.d/$router-modemmanager start
+  }
+
+#Finds what model router we are currently in
+
+if grep -oq "DNA" /etc/device_info; then
+  router="dna"
+elif grep -oq "LEDE" /etc/device_info; then
+  router="d200"
+else
+  echo "Unsupported device model"
+  exit 0
+fi
+
+echo ""
+
+# First ping to verify if lte is down or currently up
+if ping -I lte0 8.8.8.8 -c 4; then
+  echo "------------------------------------------------------"
+  echo "Ping Successful, LTE is online and working"
+  exit 0
+else
+  echo "------------------------------------------------------"
+  echo "Ping Unsuccessful, Starting LTE Modem Restart"
+fi
+
+echo ""
+echo "------------------------------------------------------"
+#Displays the modem status information
+modemstatus --verbose
+
+echo "------------------------------------------------------"
+#Displays the listed usbs to see if the modem is visible
+lsusb -t
+
+echo "------------------------------------------------------"
+echo ""
+echo "Restarting Sequans-GPIO..."
+
+#Verizon only sequans restart
+sequans-gpio-reset
+
+if [ "$router" = "dna" ]; then 
+  modemreboot
+  modemreconnect
+else 
+  :
+fi
+
+echo "------------------------------------------------------"
+echo ""
+if ping -I lte0 8.8.8.8 -c 4; then
+  echo "Ping Successful, LTE is online and working"
+  exit 0
+else
+  echo "Ping Unsuccessful, Starting PYMM"
+fi
+
+echo "------------------------------------------------------"
+modem_re
+echo "------------------------------------------------------"
+
+if ping -I lte0 8.8.8.8 -c 4; then
+  echo "Ping Successful, LTE is online and working"
+  exit 0
+else
+  echo "Ping Unsuccessful, LTE is still down after PYMM. Check Antennas, Interference, Cell Mapper Coverage, Power Pull"
+  exit 1
+fi
