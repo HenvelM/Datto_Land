@@ -35,17 +35,35 @@ echo "James is helping ..."
 case "$ver" in
     "A42")
        scan_list=$(
+            iw dev ap0_0 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap0_1 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
             iw dev ap0_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
-            iw dev ap0_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
-            iw dev ap0_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/'
+            iw dev ap0_3 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_0 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_1 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_3 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_0 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_1 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_3 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/'
         )
         ;;
         
     "A62")
        scan_list=$(
+            iw dev ap0_0 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap0_1 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
             iw dev ap0_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
-            iw dev ap0_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
-            iw dev ap0_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/'
+            iw dev ap0_3 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_0 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_1 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap1_3 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_0 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_1 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_2 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/';
+            iw dev ap2_3 scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep -v "TSF\|interval\|capability\|Supported\|TIM:\|seen:\|elements\|freq:" | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed 's/(on ap[0-9]*_[0-9]*)//' | sed '/^BSS/ s/^/\n\n/'
         )
         ;;
         
