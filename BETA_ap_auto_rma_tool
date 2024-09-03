@@ -393,7 +393,7 @@ if [ "$tool" = "reflash" ]; then
                  esac
             else
                 echo "DNA executing reflash for AP840/440"
-                mountrw ; opkg update ; opkg install ap51-flash ; mountro
+                mountrw ; opkg install http://downloads.openwrt.org/releases/23.05.3/packages/x86_64/packages/ap51-flash_2022.0-2_x86_64.ipk ; mountro
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
