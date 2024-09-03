@@ -372,7 +372,7 @@ if [ "$tool" = "reflash" ]; then
         "DNA")
             if [ "$ref_model" = "ap62" ] || [ "$ref_model" = "ap42" ]; then
                 echo "DNA executing reflash for AP62/42"
-                mountrw ; opkg update ; opkg install ap51-flash ; mountro
+                mountrw ; opkg install http://downloads.openwrt.org/releases/23.05.3/packages/x86_64/packages/ap51-flash_2022.0-2_x86_64.ipk ; mountro
                 cd /tmp
                 case "$going_to" in
                 6.*)
