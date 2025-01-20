@@ -68,6 +68,14 @@ fi
 
 echo "------------------------------------------------------"
 echo ""
+echo "Restarting U-Blox..."
+
+#U-blox modem restart
+gcom -s -d /dev/ttyU-BLOX /etc/gcom/u-blox/rebootmodem.gcom
+
+
+echo "------------------------------------------------------"
+echo ""
 if ping -I lte0 8.8.8.8 -c 4; then
   echo "Ping Successful, LTE is online and working"
   exit 0
