@@ -111,7 +111,7 @@ echo ""
 
 if [ "$tool" = "sysupgrade" ]; then
     case "$ver" in
-     "tw420")
+     "TW420")
 	case "firmware" in
 		7.*)
 		 echo "DSE421 Upgrade"
