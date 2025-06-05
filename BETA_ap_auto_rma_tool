@@ -107,6 +107,19 @@ echo ""
 # Runs the standard commands based on the model and version of the current AP.
 # If doing a sysupgrade ensures that NG6 cannot go to NG7
 
+# For 7.1 quickly adding this now,
+
+if grep -q 7.1 /etc/fw_core_version; then
+    manual_install=true
+    mkdir -p /tmp/ap51
+    curl -o /tmp/ap51/ap51.ipk \
+        https://downloads.openwrt.org/releases/23.05.3/packages/aarch64_cortex-a53/packages/ap51-flash_2022.0-2_aarch64_cortex-a53.ipk
+    tar -xzf /tmp/ap51/ap51.ipk -C /tmp/ap51/
+    tar -xzf /tmp/ap51/data.tar.gz -C /tmp/ap51/
+    mv /tmp/ap51/usr/sbin/ap51-flash /sbin/ap51-flash
+    rm -rf /tmp/ap51
+fi
+
 #Sysupgrade path
 
 if [ "$tool" = "sysupgrade" ]; then
@@ -283,12 +296,20 @@ if [ "$tool" = "reflash" ]; then
                     echo "Executing reflash for NG6"
                     echo "Downloading: $ng6_rf_url"
                     curl -O "$ng6_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_2
                     ;;
                 7.*)
                     echo "Executing reflash for NG7"
                     echo "Downloading: $b_rf_url"
                     curl -O "$b_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_1
                     ;;
                 *)
@@ -304,6 +325,10 @@ if [ "$tool" = "reflash" ]; then
     	              echo "Executing reflash for DSE421"
     	              echo "Downloading: $tw_rf_url"
     	              curl -O "$tw_rf_url"
+		      echo "FW Download complete"
+		      echo ""
+                      echo ""
+                      echo "Scanning for compatible devices..."
     	              $flashing_3
     	              ;;
                    *)
@@ -316,6 +341,10 @@ if [ "$tool" = "reflash" ]; then
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
+		echo "FW Download complete"
+		echo ""
+                echo ""
+                echo "Scanning for compatible devices..."
                 $flashing_0
             fi
            ;;
@@ -329,12 +358,20 @@ if [ "$tool" = "reflash" ]; then
                     echo "Executing reflash for NG6"
                     echo "Downloading: $ng6_rf_url"
                     curl -O "$ng6_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_2
                     ;;
                 7.*)
                     echo "Executing reflash for NG7"
                     echo "Downloading: $b_rf_url"
                     curl -O "$b_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_1
                     ;;
                 *)
@@ -350,6 +387,10 @@ if [ "$tool" = "reflash" ]; then
     	              echo "Executing reflash for DSE421"
     	              echo "Downloading: $tw_rf_url"
     	              curl -O "$tw_rf_url"
+		      echo "FW Download complete"
+		      echo ""
+                      echo ""
+                      echo "Scanning for compatible devices..."
     	              $flashing_3
     	              ;;
                    *)
@@ -362,6 +403,10 @@ if [ "$tool" = "reflash" ]; then
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
+		echo "FW Download complete"
+		echo ""
+                echo ""
+                echo "Scanning for compatible devices..."
                 $flashing_0
             fi
            ;;
@@ -375,12 +420,20 @@ if [ "$tool" = "reflash" ]; then
                     echo "Executing reflash for NG6"
                     echo "Downloading: $ng6_rf_url"
                     curl -O "$ng6_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_2
                     ;;
                 7.*)
                     echo "Executing reflash for NG7"
                     echo "Downloading: $b_rf_url"
                     curl -O "$b_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_1
                     ;;
                 *)
@@ -396,6 +449,10 @@ if [ "$tool" = "reflash" ]; then
     	             echo "Executing reflash for DSE421"
     	             echo "Downloading: $tw_rf_url"
     	             curl -O "$tw_rf_url"
+		     echo "FW Download complete"
+		     echo ""
+                     echo ""
+                     echo "Scanning for compatible devices..."
     	             $flashing_3
     	             ;;
                    *)
@@ -408,6 +465,10 @@ if [ "$tool" = "reflash" ]; then
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
+		echo "FW Download complete"
+		echo ""
+                echo ""
+                echo "Scanning for compatible devices..."
                 $flashing_0
             fi
            ;;
@@ -421,12 +482,20 @@ if [ "$tool" = "reflash" ]; then
                     echo "Executing reflash for NG6"
                     echo "Downloading: $ng6_rf_url"
                     curl -O "$ng6_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_2
                     ;;
                 7.*)
                     echo "Executing reflash for NG7"
                     echo "Downloading: $b_rf_url"
                     curl -O "$b_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_1
                     ;;
                 *)
@@ -442,6 +511,10 @@ if [ "$tool" = "reflash" ]; then
     	             echo "Executing reflash for DSE421"
     	             echo "Downloading: $tw_rf_url"
     	             curl -O "$tw_rf_url"
+		     echo "FW Download complete"
+		     echo ""
+                     echo ""
+                     echo "Scanning for compatible devices..."
     	             $flashing_3
     	             ;;
                    *)
@@ -454,6 +527,10 @@ if [ "$tool" = "reflash" ]; then
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
+		echo "FW Download complete"
+		echo ""
+                echo ""
+                echo "Scanning for compatible devices..."
                 $flashing_0
             fi
            ;;
@@ -467,12 +544,20 @@ if [ "$tool" = "reflash" ]; then
                     echo "Executing reflash for NG6"
                     echo "Downloading: $ng6_rf_url"
                     curl -O "$ng6_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_2
                     ;;
                 7.*)
                     echo "Executing reflash for NG7"
                     echo "Downloading: $b_rf_url"
                     curl -O "$b_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_1
                     ;;
                 *)
@@ -488,6 +573,10 @@ if [ "$tool" = "reflash" ]; then
     	             echo "Executing reflash for DSE421"
     	             echo "Downloading: $tw_rf_url"
     	             curl -O "$tw_rf_url"
+		     echo "FW Download complete"
+		     echo ""
+                     echo ""
+                     echo "Scanning for compatible devices..."
     	             $flashing_3
     	             ;;
                    *)
@@ -500,6 +589,10 @@ if [ "$tool" = "reflash" ]; then
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
+		echo "FW Download complete"
+		echo ""
+                echo ""
+                echo "Scanning for compatible devices..."
                 $flashing_0
             fi
            ;;
@@ -513,12 +606,20 @@ if [ "$tool" = "reflash" ]; then
                     echo "Executing reflash for NG6"
                     echo "Downloading: $ng6_rf_url"
                     curl -O "$ng6_rf_url"
-                    $flashing_2
-                    ;;
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
+                    $flashing_2		    
+		    ;;
                 7.*)
                     echo "Executing reflash for NG7"
                     echo "Downloading: $b_rf_url"
                     curl -O "$b_rf_url"
+		    echo "FW Download complete"
+		    echo ""
+                    echo ""
+                    echo "Scanning for compatible devices..."
                     $flashing_1
                     ;;
                 *)
@@ -534,6 +635,10 @@ if [ "$tool" = "reflash" ]; then
     	             echo "Executing reflash for DSE421"
     	             echo "Downloading: $tw_rf_url"
     	             curl -O "$tw_rf_url"
+		     echo "FW Download complete"
+		     echo ""
+                     echo ""
+                     echo "Scanning for compatible devices..."
     	             $flashing_3
     	             ;;
                    *)
@@ -546,6 +651,10 @@ if [ "$tool" = "reflash" ]; then
                 cd /tmp
                 echo "Downloading: $rf_url"
                 curl -O "$rf_url"
+	        echo "FW Download complete"
+		echo ""
+                echo ""
+                echo "Scanning for compatible devices..."
                 $flashing_0
             fi
            ;;
