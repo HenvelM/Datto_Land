@@ -28,6 +28,10 @@ for model in $AP; do
     fi
 done
 
+if grep -q "7.1" /etc/fw_core_version; then
+   ver="A62"
+fi
+
 echo "This is a $ver"
 echo "James is helping ..." 
 
