@@ -32,7 +32,7 @@ if grep -q "7.1" /etc/fw_core_version; then
    ver="A62"
 fi
 
-echo "This is a $ver"
+echo "This is a $ver, ignore if on 7.1"
 echo "James is helping ..." 
 
 # Run the command based on the model and Clean up the output, remove (on scan), etc.
