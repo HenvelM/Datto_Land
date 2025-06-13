@@ -6,6 +6,7 @@ Collection of scripts made to automate repetitive tasks we get at work.
 
 - BSS Scan
 - Auto Firmware Flash
+- LTE Repair tool
 
 ## BSS Scan
 
@@ -20,6 +21,8 @@ This script can be used to automatically update the current AP to the desire ver
  To utilize this script just run curl -s (link) | sh -s -- (sysupgrade or reflash) (7.X.XX or 6.X.XX) (AP Model*) (Interface*) 
 
 * "*" Used only with reflash
+
+With the PDUs a minor change had to be made due to the files, (sysupgrade) (X.X.XX) (PDU model). Re-flash isn't available for the device and sysupgrade would require naming the PDU model. 
 
 ## LTE Repair
 
