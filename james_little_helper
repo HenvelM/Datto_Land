@@ -29,7 +29,7 @@ for model in $AP; do
 done
 
 if grep -q "7.1" /etc/fw_core_version; then
-   ver="A62"
+   ver="AP71"
 fi
 
 echo "This is a $ver, ignore if on 7.1"
@@ -82,6 +82,13 @@ case "$ver" in
             iw dev scan scan ap-force | grep -A 10 "ac:86:74\|f8:d9:b8" | grep "BSS\|signal\|SSID\|channel" | sed 's/(on scan)//g' | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed '/^BSS/ s/^/\n/'
         )
         ;;
+
+    "AP71")
+         scan_list=$(
+           ip link set wlan0 up; iw dev wlan0 scan ap-force  | grep -A 10 "ac:86:74\|f8:d9:b8" | grep "BSS\|signal\|SSID\|channel" | sed 's/(on scan)//g' | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed '/^BSS/ s/^/\n/' ; ip link set wlan0 down
+         )
+         ;;
+
     *)
         echo "No matching device found"
         ;;
@@ -98,7 +105,4 @@ echo "$unique_macs" | while read -r mac_addresses; do
     echo "$addr_match"
 done
 
-# Calculate the suggested dBm based on RSSI value (Lower the dBm by __)
 
-
-# Output the RSSI scan for partner and suggested RSSI changes based on formula.  
