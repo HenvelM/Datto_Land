@@ -85,7 +85,7 @@ case "$ver" in
 
     "AP71")
          scan_list=$(
-           ip link set wlan0 up; iw dev wlan0 scan ap-force  | grep -A 10 "ac:86:74\|f8:d9:b8" | grep "BSS\|signal\|SSID\|channel" | sed 's/(on scan)//g' | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed '/^BSS/ s/^/\n/' ; ip link set wlan0 down
+           ip link set wlan0 up; iw dev wlan0 scan ap-force  | grep -A 10 "ac:86:74\|f8:d9:b8" | grep "BSS\|signal\|SSID\|channel" | sed 's/(on wlan0)//g' | sed '/BSS/s/\(BSS.*\)/&\nAP:/' | sed '/^BSS/ s/^/\n/' ; ip link set wlan0 down
          )
          ;;
 
